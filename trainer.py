@@ -122,7 +122,7 @@ class SegmentationTrainer:
             dict(params=self._model.parameters(), lr=learning_rate),
         ])
 
-        # self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, self.epochs_count)
+        self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, self.epochs_count)
 
         self._train_epoch = smp_utils.train.TrainEpoch(
             self._model,
@@ -226,6 +226,6 @@ class SegmentationTrainer:
                 }, checkpoint_name)  # checkpoint_name + '_iou_{:.2f}_epoch_{}.pth'.format(self._max_score, i))
                 print(f'Model saved at {checkpoint_name}')
 
-            # self._scheduler.step()
-            # print(self._scheduler.get_last_lr())
+            self._scheduler.step()
+            print(self._scheduler.get_last_lr())
         writer.close()
