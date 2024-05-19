@@ -10,16 +10,6 @@ from datetime import datetime
 from model import get_model
 # from torchsummary import summary
 
-def dice_loss(y_pred, y_real):
-    smooth = 1.
-    pred = y_pred.contiguous()
-    target = y_real.contiguous()
-    pred = nn.Sigmoid(pred)
-    num = 2. * torch.sum(pred * target)
-    den = torch.sum(pred.pow(2) + target.pow(2))
-    dice_coef = (num + smooth) / (den + smooth)
-    res = 1 - dice_coef
-    return res
 
 class SegmentationTrainer:
     def __init__(
@@ -120,9 +110,9 @@ class SegmentationTrainer:
 
         self.valid_loader['weight'] /= num_elements
 
-        # self._loss = smp_utils.losses.DiceLoss()
+        self._loss = smp_utils.losses.DiceLoss()
         # self._loss = smp.losses.FocalLoss(mode='binary', alpha=0.25)
-        self._loss = dice_loss
+        # self._loss = dice_loss
 
         self._metrics = [
             smp_utils.metrics.IoU(threshold=0.5),
