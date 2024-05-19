@@ -109,7 +109,7 @@ class SegmentationTrainer:
 
         self.valid_loader['weight'] /= num_elements
 
-        self._loss = smp.losses.DiceLoss()
+        self._loss = smp_utils.losses.DiceLoss()
         # self._loss = smp.losses.FocalLoss(mode='binary', alpha=0.25)
         
         self._metrics = [
