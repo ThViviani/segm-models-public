@@ -111,6 +111,7 @@ def make_prediction(model, image, tile_size: int, step: int, device, thres: floa
             iou_val = iou(res, mask, eps=1e-7)
             acc_val = accuracy(res, mask)
             metrics = {'iou': float(iou_val), 'acc': float(acc_val)}
+            print(metrics)
             for key in metrics:
                 if math.isnan(metrics[key]):
                     metrics[key] = 0
