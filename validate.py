@@ -75,7 +75,11 @@ def convert_torch_to_8_bit(tensor):
     max_val = np.max(res)
     min_val = np.min(res)
 
+    print(tensor)
+    print(max_val, min_val)
+
     res = 255.0 * (res - min_val) / (max_val - min_val)
+    print(res)
     res = np.uint8(res)
     return res
 
