@@ -10,6 +10,17 @@ from datetime import datetime
 from model import get_model
 # from torchsummary import summary
 
+def dice_loss(y_pred, y_real):
+    smooth = 1.
+    pred = y_pred.contiguous()
+    target = y_real.contiguous()
+    pred = nn.Sigmoid(pred)
+    num = 2. * torch.sum(pred * target)
+    den = torch.sum(pred.pow(2) + target.pow(2))
+    dice_coef = (num + smooth) / (den + smooth)
+    res = 1 - dice_coef
+    return res
+
 class SegmentationTrainer:
     def __init__(
             self,
@@ -28,7 +39,7 @@ class SegmentationTrainer:
             activation='sigmoid',
             device='cuda',
             epochs_count=50,
-            learning_rate=0.001,
+            learning_rate=1e-4,
             train_batch_size=2,
             valid_batch_size=2,
             train_workers_count=1,
@@ -109,9 +120,10 @@ class SegmentationTrainer:
 
         self.valid_loader['weight'] /= num_elements
 
-        self._loss = smp_utils.losses.DiceLoss()
+        # self._loss = smp_utils.losses.DiceLoss()
         # self._loss = smp.losses.FocalLoss(mode='binary', alpha=0.25)
-        
+        self._loss = dice_loss
+
         self._metrics = [
             smp_utils.metrics.IoU(threshold=0.5),
         ]
@@ -120,7 +132,7 @@ class SegmentationTrainer:
             dict(params=self._model.parameters(), lr=learning_rate),
         ])
 
-        self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, self.epochs_count)
+        # self._scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(self._optimizer, self.epochs_count)
 
         self._train_epoch = smp_utils.train.TrainEpoch(
             self._model,
@@ -224,6 +236,6 @@ class SegmentationTrainer:
                 }, checkpoint_name)  # checkpoint_name + '_iou_{:.2f}_epoch_{}.pth'.format(self._max_score, i))
                 print(f'Model saved at {checkpoint_name}')
 
-            self._scheduler.step()
-            print(self._scheduler.get_last_lr())
+            # self._scheduler.step()
+            # print(self._scheduler.get_last_lr())
         writer.close()
