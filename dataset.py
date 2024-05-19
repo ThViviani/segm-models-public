@@ -147,6 +147,7 @@ class TilesDataset(Dataset):
         for i in tqdm(range(len(self.image_set))):
             # calc rgb mean
             img = self.read_image(self.image_set[i])  # изображение в формате opencv - B G R + доп каналы
+            print(img, img.shape)
             for ch in range(img.shape[2]):
                 m = np.array(img[:, :, ch]).mean()
                 mean[ch].append(m)
