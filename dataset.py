@@ -80,6 +80,7 @@ class TilesDataset(Dataset):
             print("Please provide a dataset path -d or train images list -lt ", file=sys.stderr)
             exit()
 
+        print("fdfdfdfdfdfdf", len(self.image_set))
         self.mean_var = {'mean': [], 'std': []}
         self.read_mean_vals(data_dir)
         print(f'Mean vals {self.mean_var}')
