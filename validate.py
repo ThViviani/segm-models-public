@@ -74,10 +74,6 @@ def convert_torch_to_8_bit(tensor):
     res = res.reshape((w, h))
     max_val = np.max(res)
     min_val = np.min(res)
-
-    # print(tensor)
-    print(max_val, min_val)
-
     res = 255.0 * (res - min_val) / (max_val - min_val)
     res = np.uint8(res)
     return res
@@ -109,6 +105,7 @@ def make_prediction(model, image, tile_size: int, step: int, device, thres: floa
         raw = res.clone()
         res_low = torch.where(res < thres, res, torch.tensor(0, dtype=res.dtype).to(device))
         res = torch.where(res >= thres, 1, 0)
+        print(res)
         metrics = None
         if mask is not None:
             iou_val = iou(res, mask, eps=1e-7)
