@@ -20,4 +20,21 @@ def get_model(model_name: str, encoder_name: str, encoder_weights: str, activati
             classes=classes,
             activation=activation
         )
+    if model_name == 'pan':
+        model = smp.PAN(
+            encoder_name=encoder_name,
+            encoder_weights=encoder_weights,
+            in_channels=in_channels,
+            classes=classes,
+            activation=activation
+        )
+
+    if model_name == 'manet':
+        model = smp.MAnet(
+            encoder_name=encoder_name,
+            encoder_weights=encoder_weights,
+            in_channels=in_channels,
+            classes=classes,
+            activation=activation
+        )
     return model
