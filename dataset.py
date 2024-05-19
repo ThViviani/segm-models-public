@@ -80,7 +80,6 @@ class TilesDataset(Dataset):
             print("Please provide a dataset path -d or train images list -lt ", file=sys.stderr)
             exit()
 
-        print("fdfdfdfdfdfdf", len(self.image_set))
         self.mean_var = {'mean': [], 'std': []}
         self.read_mean_vals(data_dir)
         print(f'Mean vals {self.mean_var}')
@@ -145,7 +144,6 @@ class TilesDataset(Dataset):
     def write_means(self, path: str):
         mean = [[] for i in range(self.in_channels)]
         var = [[] for i in range(self.in_channels)]
-        print(f'fdfdfdfdfdfdf {len(self.image_set)}')
         for i in tqdm(range(len(self.image_set))):
             # calc rgb mean
             img = self.read_image(self.image_set[i])  # изображение в формате opencv - B G R + доп каналы
